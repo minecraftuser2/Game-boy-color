@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GBC Emulator</title>
+</head>
+<body>
+
+<h1>Game Boy Color Emulator</h1>
+
+<!-- ROM loader -->
+<input type="file" id="romInput" accept=".gb,.gbc">
+
+<br><br>
+
+<!-- Emulator screen -->
+<canvas id="screen" width="160" height="144"></canvas>
+
+<br><br>
+
+<!-- Controls info -->
+<p>
+Controls (example):
+<br>Arrow keys = D-Pad
+<br>Z = A
+<br>X = B
+<br>Enter = Start
+<br>Shift = Select
+</p>
+
+<!-- Emulator core (YOU provide these files) -->
+<script src="gbc.js"></script>
+<script src="emulator.js"></script>
+
+<script>
+    const romInput = document.getElementById("romInput");
+
+    romInput.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function () {
+            const romData = new Uint8Array(reader.result);
+
+            // You MUST adapt this call to match your emulator API
+            if (typeof loadROM === "function") {
+                loadROM(romData);
+            } else {
+                alert("loadROM() not found. Check your emulator JS.");
+            }
+        };
+
+        reader.readAsArrayBuffer(file);
+    });
+</script>
+
+</body>
+</html>
